@@ -1,37 +1,30 @@
 # chatbot.py
 
-import openai
-from config import OPENAI_API_KEY
+import google.generativeai as genai
+from config import GEMINI_API_KEY
 
-openai.api_key = OPENAI_API_KEY
+# Configure your Gemini API key
+genai.configure(api_key=GEMINI_API_KEY)
 
-# Memory to store chat
-chat_history = [
-    {"role": "system", "content": "You are a helpful and smart assistant."}
-]
+# Correct model name with full path
+model = genai.GenerativeModel("models/gemini-2.0-flash")
+
+
+# Chat session with memory
+chat = model.start_chat(history=[])
 
 def get_bot_response(user_input):
     try:
-        chat_history.append({"role": "user", "content": user_input})
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # or "gpt-4" if you have access
-            messages=chat_history
-        )
-        answer = response.choices[0].message["content"]
-        chat_history.append({"role": "assistant", "content": answer})
-        return answer
+        response = chat.send_message(user_input)
+        return response.text
     except Exception as e:
         return f"⚠️ Error: {str(e)}"
 
 def get_full_history():
     return "\n".join(
-        f"{m['role'].capitalize()}: {m['content']}"
-        for m in chat_history
-        if m["role"] != "system"
+        f"{item.role.title()}: {item.parts[0].text}" for item in chat.history
     )
 
 def clear_history():
-    global chat_history
-    chat_history = [
-        {"role": "system", "content": "You are a helpful and smart assistant."}
-    ]
+    global chat
+    chat = model.start_chat(history=[])
