@@ -1,63 +1,106 @@
+/* General layout */
 body {
     background-color: #f5f7fa;
     font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
 }
 
+/* Chat container box */
 .container {
-    width: 60%;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: white;
+    width: 90%;
+    max-width: 700px;
+    margin-top: 40px;
+    padding: 25px;
+    background-color: #ffffff;
     border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
+/* Header */
 h2 {
     text-align: center;
     color: #333;
+    margin-bottom: 25px;
 }
 
+/* Form styling */
 form {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 20px;
 }
 
 input[type="text"] {
-    flex: 1;
+    flex: 1 1 100%;
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #ccc;
+    font-size: 16px;
 }
 
 button {
-    padding: 12px 20px;
+    padding: 10px 20px;
     border: none;
     border-radius: 8px;
     background-color: #0077ff;
     color: white;
+    font-size: 15px;
     cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    background-color: #005ec2;
 }
 
 button[name="clear"] {
     background-color: #f44336;
 }
 
+button[name="clear"]:hover {
+    background-color: #d12c1e;
+}
+
+/* Chat bubbles */
 .chat {
     margin-top: 20px;
-    padding: 10px;
+    padding: 15px;
     background-color: #f0f8ff;
-    border-radius: 10px;
+    border-radius: 12px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
 }
 
+/* Each user/bot block */
 .user, .bot {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: #e9f1ff;
+    line-height: 1.5;
+    word-break: break-word;
 }
 
+.bot {
+    background-color: #e7ffe5;
+}
+
+/* Chat history display */
 .history {
     margin-top: 30px;
     padding: 15px;
     background: #f9f9f9;
     border-left: 5px solid #0077ff;
-    border-radius: 8px;
+    border-radius: 10px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 250px;
+    overflow-y: auto;
 }
