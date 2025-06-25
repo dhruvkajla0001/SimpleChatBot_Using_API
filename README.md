@@ -67,6 +67,7 @@ python app.py
   </ul>
 
   <h2>📬 Contact</h2>
-  <p>Made with 💙 by <strong>Your Name</strong>. Reach out via <a href="mailto:your@email.com">email</a> or follow on <a href="https://github.com/yourusername" target="_blank">GitHub</a>.</p>
+  <p>Made with 💙 by <strong>Dhruv Kajla</strong>. Reach out via <a href="dhruvkajla@gmail.com">email</a> or follow on <a href="https://github.com/dhruvkajla0001" target="_blank">GitHub</a>.</p>
+   <p>Made with 💙 by <strong>Mukund Malik</strong>. Reach out via <a href="mukund3818.be22@chitkara.edu.in">email</a> or follow on <a href="https://github.com/Mukusick2" target="_blank">GitHub</a>.</p>
 </body>
 </html>
