@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>BuddyBot - Your Learning Friend!</title>
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
@@ -11,17 +12,25 @@
         <div style="text-align:center; margin-bottom:18px; font-size:1.2em; color:#36cfc9;">
             <span style="font-size:1.5em;">👋</span> Hi! I'm <b>BuddyBot</b>. Ask me anything, or try a quiz! <span style="font-size:1.3em;">🎈📚✨</span>
         </div>
+
+        <!-- ✅ FORM WITH MIC BUTTON -->
         <form method="POST">
-            <input type="text" name="query" placeholder="Ask me a fun question, or type 'quiz'!" required>
+            <input type="text" name="query" id="user_input" placeholder="Ask me a fun question, or type 'quiz'!" required>
+
+            <!-- 🎤 Microphone Button -->
+            <button type="button" id="micBtn" title="Speak"><span id="micIcon">🎤</span></button>
+
             <button name="ask" type="submit">Send <span style="font-size:1.2em;">🚀</span></button>
             <button name="clear" type="submit">Clear <span style="font-size:1.2em;">🧹</span></button>
         </form>
+
         {% if query %}
         <div class="chat">
             <div class="user"><strong>You:</strong> {{ query }}</div>
             <div class="bot"><strong>BuddyBot:</strong> {{ response }}</div>
         </div>
         {% endif %}
+
         <div class="history">
             <h4>Chat History</h4>
             {% if history.strip() %}
@@ -41,12 +50,14 @@
             <div class="no-history">No history yet! Start chatting! <span style="font-size:1.2em;">✨</span></div>
             {% endif %}
         </div>
-        <!-- Placeholder for sound effects -->
+
+        <!-- 🎵 Sound Effects -->
         <audio id="sendSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
         <audio id="receiveSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
     </div>
+
+    <!-- 🌈 Background and Sound -->
     <script>
-    // Fun unpredictable background color transitions on each message
     function randomPastel() {
         const h = Math.floor(Math.random()*360);
         return `hsl(${h}, 80%, 90%)`;
@@ -55,10 +66,54 @@
         document.body.style.background = `linear-gradient(135deg, ${randomPastel()} 0%, ${randomPastel()} 100%)`;
     }
     if (document.querySelector('.chat')) animateBackground();
-    // Play sound on send/receive
+
+    // 🎵 Sound on send/receive
     if (document.querySelector('.chat')) {
         document.getElementById('sendSound').play();
-        setTimeout(()=>document.getElementById('receiveSound').play(), 400);
+        setTimeout(() => document.getElementById('receiveSound').play(), 400);
+    }
+    </script>
+
+    <!-- 🎤 Voice Input -->
+    <script>
+    const micBtn = document.getElementById('micBtn');
+    const inputBox = document.getElementById('user_input');
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        micBtn.addEventListener('click', () => {
+            recognition.start();
+            micBtn.disabled = true;
+            micBtn.innerText = '🎙️ Listening...';
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            inputBox.value = transcript;
+            micBtn.innerText = '🎤';
+            micBtn.disabled = false;
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            micBtn.innerText = '🎤';
+            micBtn.disabled = false;
+        };
+
+        recognition.onend = () => {
+            micBtn.innerText = '🎤';
+            micBtn.disabled = false;
+        };
+    } else {
+        micBtn.disabled = true;
+        micBtn.title = 'Speech recognition not supported. Use Chrome or Edge.';
+        alert("⚠️ Speech recognition not supported. Try using Google Chrome.");
     }
     </script>
 </body>

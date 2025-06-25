@@ -135,14 +135,20 @@ button[name="clear"]:hover {
     }
 }
 
-.user {
-    background-color: #d0ebff;
-    border-left: 5px solid #339af0;
-}
-
-.bot {
-    background-color: #e6fcf5;
-    border-left: 5px solid #20c997;
+.user, .bot {
+    margin-bottom: 16px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-size: 15.5px;
+    line-height: 1.65;
+    font-weight: 500;
+    word-break: break-word;
+    background-color: #e9ecef;
+    color: #212529;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: smoothFadeIn 0.45s ease-out forwards;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
 .history {
@@ -160,9 +166,11 @@ button[name="clear"]:hover {
     animation: slideFade 0.6s ease-in-out;
 }
 
-@keyframes slideFade {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+@keyframes smoothFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .history h4 {
@@ -173,4 +181,24 @@ button[name="clear"]:hover {
     border-bottom: 1px solid #dee2e6;
     padding-bottom: 6px;
     margin-bottom: 12px;
+}
+
+#micBtn {
+    background-color: #20c997;
+    color: white;
+    font-size: 16px;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#micBtn:hover {
+    background-color: #17a589;
+}
+
+#micIcon {
+    font-size: 18px;
 }
