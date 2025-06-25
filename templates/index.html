@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gemini Pro Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>🤖 Gemini AI Chatbot</h2>
+
+        <form method="POST">
+            <input type="text" name="query" placeholder="Type your question here..." required>
+            <button name="ask" type="submit">Send</button>
+            <button name="clear" type="submit">Clear History</button>
+        </form>
+
+        {% if query %}
+        <div class="chat">
+            <div class="user"><strong>You:</strong> {{ query }}</div>
+            <div class="bot"><strong>Bot:</strong> {{ response }}</div>
+        </div>
+        {% endif %}
+
+        <div class="history">
+            <h4>🕒 Chat History</h4>
+            <pre>{{ history }}</pre>
+        </div>
+    </div>
+</body>
+</html>
