@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
 body {
-    background-color: #f4f6f8;
+    background: #111;
+    color: #fff;
     font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
@@ -9,7 +10,24 @@ body {
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
-    animation: fadeIn 0.8s ease-in-out;
+    animation: fadeIn 0.8s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: rgb(24, 24, 24)
+    
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
 }
 
 /* Fade-in page entrance */
@@ -19,34 +37,51 @@ body {
 }
 
 .container {
+    position: relative;
+    z-index: 1;
     width: 95%;
-    max-width: 800px;
+    max-width: fit-content;
     margin-top: 50px;
     padding: 30px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    animation: slideUp 0.6s ease-in-out;
+    background: rgba(20, 20, 20, 0.98);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(255, 221, 51, 0.12), 0 1.5px 8px rgba(255, 221, 51, 0.08);
+    animation: slideUp 0.7s cubic-bezier(0.4,0,0.2,1);
+    border: 1.5px solid #ffd600;
+    transition: box-shadow 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+.container:hover {
+    box-shadow: 0 16px 48px #ffd60044, 0 1.5px 8px #ffd60033;
+    transform: translateY(-6px) scale(1.01);
 }
 
 h2 {
     text-align: center;
-    color: #1a1a1a;
+    color: #ffd600;
     margin-bottom: 30px;
     font-size: 2.4em;
     font-weight: 700;
     letter-spacing: 0.5px;
-    animation: popIn 0.6s ease-in-out;
+    animation: popIn 0.6s cubic-bezier(0.4,0,0.2,1);
+    text-shadow: 0 2px 12px #000, 0 0 2px #ffd600;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.3s;
 }
 
-@keyframes popIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+h2:hover::after {
+    content: '';
+    display: block;
+    width: 60%;
+    margin: 0 auto;
+    border-bottom: 3px solid #ffd600;
+    animation: underlineGrow 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes underlineGrow {
+    from { width: 0; }
+    to { width: 60%; }
 }
 
 form {
@@ -60,55 +95,102 @@ input[type="text"] {
     flex: 1 1 100%;
     padding: 16px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1.5px solid #ffd600;
     border-radius: 8px;
-    transition: all 0.3s ease;
+    background: #181818;
+    color: #fff;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
     outline: none;
     font-weight: 500;
 }
 
 input[type="text"]:focus {
-    border-color: #0077ff;
-    box-shadow: 0 0 6px rgba(0, 119, 255, 0.3);
+    border-color: #fff200;
+    box-shadow: 0 0 8px #ffd60099;
+    background: #222;
 }
 
 button {
-    padding: 14px 28px;
+    position: relative;
+    overflow: hidden;
+    padding: 14px 50px;
     font-size: 16px;
     font-weight: 600;
     border: none;
     border-radius: 8px;
-    background-color: #0077ff;
-    color: white;
+    background: linear-gradient(90deg, #ffd600 0%, #fff200 100%);
+    color: #111;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 119, 255, 0.15);
+    transition: background 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 4px 16px rgba(255, 221, 51, 0.18);
+    letter-spacing: 0.5px;
 }
 
 button:hover {
-    background-color: #005ec2;
-    transform: scale(1.04);
+    background: linear-gradient(90deg, #fff200 0%, #ffd600 100%);
+    transform: scale(1.06) rotate(-1deg);
+    box-shadow: 0 6px 24px #ffd60055;
 }
 
-button:active {
-    transform: scale(0.97);
+button:active::after {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 0; height: 0;
+    background: rgba(255, 214, 0, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: ripple 0.5s linear;
+    z-index: 2;
+}
+
+@keyframes ripple {
+    to {
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+    }
 }
 
 button[name="clear"] {
-    background-color: #f44336;
+    background: linear-gradient(90deg, #222 0%, #444 100%);
+    color: #ffd600;
+    border: 1.5px solid #ffd600;
 }
 
 button[name="clear"]:hover {
-    background-color: #d32f2f;
+    background: #111;
+    color: #fff200;
+    border: 1.5px solid #fff200;
+    padding: 14px 50px;
 }
 
 .chat {
     margin-top: 20px;
-    background-color: #f1f3f5;
+    background: rgba(30, 30, 30, 0.98);
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow-wrap: break-word;
     white-space: pre-wrap;
+    border: 1.5px solid #ffd600;
+    box-shadow: 0 2px 12px #ffd60022;
+    transition: box-shadow 0.4s cubic-bezier(0.4,0,0.2,1);
+    max-height: 635px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ffd600 #222;
+}
+
+.chat::-webkit-scrollbar {
+    width: 8px;
+    background: #222;
+}
+.chat::-webkit-scrollbar-thumb {
+    background: #ffd600;
+    border-radius: 6px;
+}
+.chat::-webkit-scrollbar-thumb:hover {
+    background: #fff200;
 }
 
 .user, .bot {
@@ -119,86 +201,168 @@ button[name="clear"]:hover {
     line-height: 1.65;
     font-weight: 500;
     word-break: break-word;
-    background-color: #e9ecef;
-    color: #212529;
-    animation: fadePop 0.5s ease-in-out;
+    background: #181818;
+    color: #fff;
+    border-left: 4px solid #ffd600;
+    animation: fadePop 0.5s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 2px 8px #ffd60022;
+    transition: box-shadow 0.4s, transform 0.4s, background 0.3s, color 0.3s;
 }
 
-@keyframes fadePop {
-    0% {
-        opacity: 0;
-        transform: scale(0.95) translateY(10px);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
+.user {
+    border-left: 4px solid #fff200;
+    background: #222;
+    color: #ffd600;
 }
 
-.user, .bot {
-    margin-bottom: 16px;
-    padding: 16px 20px;
-    border-radius: 10px;
-    font-size: 15.5px;
-    line-height: 1.65;
-    font-weight: 500;
-    word-break: break-word;
-    background-color: #e9ecef;
-    color: #212529;
-    opacity: 0;
-    transform: translateY(10px);
-    animation: smoothFadeIn 0.45s ease-out forwards;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+.bot {
+    border-left: 4px solid #ffd600;
+    background: #181818;
+    color: #fff;
+}
+
+.user:hover, .bot:hover {
+    box-shadow: 0 4px 24px #ffd60055, 0 1.5px 8px #ffd60033;
+    transform: scale(1.03) translateY(-2px);
+    background: #222;
+    color: #fff200;
 }
 
 .history {
     margin-top: 30px;
     padding: 20px;
-    background: #f8f9fa;
-    border-left: 4px solid #adb5bd;
-    border-radius: 8px;
+    background: #111;
+    border-left: 4px solid #ffd600;
+    border-radius: 10px;
     white-space: pre-wrap;
     word-break: break-word;
     max-height: 250px;
     overflow-y: auto;
     font-size: 14.5px;
-    color: #495057;
-    animation: slideFade 0.6s ease-in-out;
-}
-
-@keyframes smoothFadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    color: #fff;
+    animation: slideFade 0.6s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 2px 8px #ffd60022;
 }
 
 .history h4 {
     margin-top: 0;
     font-size: 16px;
     font-weight: 600;
-    color: #343a40;
-    border-bottom: 1px solid #dee2e6;
+    color: #ffd600;
+    border-bottom: 1px solid #ffd600;
     padding-bottom: 6px;
     margin-bottom: 12px;
 }
 
 #micBtn {
-    background-color: #20c997;
-    color: white;
+    background: linear-gradient(90deg, #ffd600 0%, #fff200 100%);
+    color: #111;
     font-size: 16px;
     padding: 14px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    transition: background 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: background 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 2px 8px #ffd60033;
 }
 
 #micBtn:hover {
-    background-color: #17a589;
+    background: linear-gradient(90deg, #fff200 0%, #ffd600 100%);
+    color: #111;
+    box-shadow: 0 4px 16px #ffd60055;
 }
 
 #micIcon {
     font-size: 18px;
+}
+
+.main-flex {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.history-side {
+    flex: 0 0 260px;
+    min-width: 220px;
+    max-width: 320px;
+    background: #111;
+    border-radius: 12px;
+    border: 1.5px solid #ffd600;
+    box-shadow: 0 2px 8px #ffd60022;
+    padding: 18px 25px 18px 18px;
+    margin-bottom: 0;
+    margin-top: 0;
+    z-index: 1;
+    max-height: 976px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ffd600 #222;
+}
+
+.chat-side {
+    flex: 1 1 0%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Custom scrollbar for Webkit browsers only on .history-side */
+.history-side::-webkit-scrollbar {
+    width: 8px;
+    background: #222;
+}
+.history-side::-webkit-scrollbar-thumb {
+    background: #ffd600;
+    border-radius: 6px;
+}
+.history-side::-webkit-scrollbar-thumb:hover {
+    background: #fff200;
+}
+
+@media (max-width: 900px) {
+    .main-flex {
+        flex-direction: column;
+        gap: 18px;
+    }
+    .history-side, .chat-side {
+        max-width: 100%;
+        width: 100%;
+    }
+    .history-side {
+        margin-bottom: 18px;
+    }
+}
+
+input[type='file'] {
+    display: none;
+}
+
+.file-label {
+    display: inline-block;
+    padding: 14px 50px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #ffd600 0%, #fff200 100%);
+    color: #111;
+    cursor: pointer;
+    transition: background 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 4px 16px rgba(255, 221, 51, 0.18);
+    letter-spacing: 0.5px;
+    margin-right: 8px;
+}
+
+.file-label:hover {
+    background: linear-gradient(90deg, #fff200 0%, #ffd600 100%);
+    transform: scale(1.06) rotate(-1deg);
+    box-shadow: 0 6px 24px #ffd60055;
+}
+
+.file-label:active {
+    transform: scale(0.97);
 }

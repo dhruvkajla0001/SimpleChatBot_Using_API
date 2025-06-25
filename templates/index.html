@@ -2,58 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BuddyBot - Your Learning Friend!</title>
+    <title>ProBot - Your Professional Assistant!</title>
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <h2>🤖 BuddyBot <span style="font-size:0.7em;">- Your Learning Friend!</span></h2>
-    <div style="text-align:center; margin-bottom:18px; font-size:1.2em; color:#36cfc9;">
-        <span style="font-size:1.5em;">👋</span> Hi! I'm <b>BuddyBot</b>. Ask me anything, or try a quiz! <span style="font-size:1.3em;">🎈📚✨</span>
+    <div class="main-flex">
+        <div class="history-side">
+            <form method="POST" style="margin-bottom: 12px; text-align:center;">
+                <button name="clear" type="submit" style="width:90%;background:linear-gradient(90deg,#222 0%,#444 100%);color:#ffd600;border:1.5px solid #ffd600;padding:10px 0;border-radius:8px;font-weight:600;cursor:pointer;transition:background 0.3s;">Clear Chat 🧹</button>
+            </form>
+            <h4>Chat History</h4>
+            {% if history.strip() %}
+            <div class="history-badge">🌟 Active Learner!</div>
+            <ul class="history-list">
+                {% for line in history.split('\n') %}
+                {% set is_user = 'User:' in line %}
+                <li class="history-item {{ 'user' if is_user else 'bot' }}">
+                    <span class="avatar">{{ '👦' if is_user else '🤖' }}</span>
+                    <span class="role" style="color:#ffd600;">{{ 'You' if is_user else 'ProBot' }}</span>
+                    <span class="msg">{{ line.split(': ', 1)[1] if ': ' in line else line }}</span>
+                    <span class="icon">{{ '🎈' if is_user else '📚' }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="no-history">No history yet! Start chatting! <span style="font-size:1.2em;color:#ffd600;">✨</span></div>
+            {% endif %}
+        </div>
+        <div class="chat-side">
+            <h2><span style="color:#ffd600;">ProBot</span> <span style="font-size:0.7em;color:#fff;">- Your Professional Assistant</span></h2>
+            <div style="text-align:center; margin-bottom:18px; font-size:1.2em; color:#ffd600;">
+                <span style="font-size:1.5em;">👋</span> Welcome to <b style="color:#fff;">ProBot</b>. Get instant, reliable answers and insights for your professional needs.
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="text" name="query" id="user_input" placeholder="Ask me a fun question, or type 'quiz'!" required>
+                <button type="button" id="micBtn" title="Speak"><span id="micIcon">🎤</span></button>
+                <label for="file-upload" class="file-label">Choose File</label>
+                <input id="file-upload" type="file" name="file" accept=".txt,.pdf,.docx" onchange="this.form.submit()" title="Upload a file to summarize">
+                <button name="ask" type="submit">Send <span style="font-size:1.2em;color:#ffd600;">🚀</span></button>
+                <button name="clear" type="submit">Clear <span style="font-size:1.2em;color:#ffd600;">🧹</span></button>
+            </form>
+            {% if query %}
+            <div class="chat">
+                <div class="user"><strong style="color:#ffd600;">You:</strong> {{ query }}</div>
+                <div class="bot"><strong style="color:#ffd600;">ProBot:</strong> {{ response }}</div>
+            </div>
+            {% endif %}
+        </div>
     </div>
-
-    <!-- ✅ FORM WITH MIC & FILE UPLOAD -->
-    <form method="POST" enctype="multipart/form-data">
-        <input type="text" name="query" id="user_input" placeholder="Ask me a fun question, or type 'quiz'!" required>
-
-        <!-- 🎤 Microphone Button -->
-        <button type="button" id="micBtn" title="Speak"><span id="micIcon">🎤</span></button>
-
-        <!-- 📁 File Upload -->
-        <input type="file" name="file" accept=".txt,.pdf,.docx" onchange="this.form.submit()" style="padding: 10px; font-size: 14px;" title="Upload a file to summarize">
-
-        <button name="ask" type="submit">Send <span style="font-size:1.2em;">🚀</span></button>
-        <button name="clear" type="submit">Clear <span style="font-size:1.2em;">🧹</span></button>
-    </form>
-
-    {% if query %}
-    <div class="chat">
-        <div class="user"><strong>You:</strong> {{ query }}</div>
-        <div class="bot"><strong>BuddyBot:</strong> {{ response }}</div>
-    </div>
-    {% endif %}
-
-    <div class="history">
-        <h4>Chat History</h4>
-        {% if history.strip() %}
-        <div class="history-badge">🌟 Active Learner!</div>
-        <ul class="history-list">
-            {% for line in history.split('\n') %}
-            {% set is_user = 'User:' in line %}
-            <li class="history-item {{ 'user' if is_user else 'bot' }}">
-                <span class="avatar">{{ '👦' if is_user else '🤖' }}</span>
-                <span class="role">{{ 'You' if is_user else 'BuddyBot' }}</span>
-                <span class="msg">{{ line.split(': ', 1)[1] if ': ' in line else line }}</span>
-                <span class="icon">{{ '🎈' if is_user else '📚' }}</span>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <div class="no-history">No history yet! Start chatting! <span style="font-size:1.2em;">✨</span></div>
-        {% endif %}
-    </div>
-
     <!-- 🎵 Sound Effects -->
     <audio id="sendSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
     <audio id="receiveSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
