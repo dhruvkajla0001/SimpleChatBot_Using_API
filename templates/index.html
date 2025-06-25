@@ -1,30 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gemini Pro Chatbot</title>
+    <title>BuddyBot - Your Learning Friend!</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h2>🤖 Gemini AI Chatbot</h2>
-
+        <h2>🤖 BuddyBot <span style="font-size:0.7em;">- Your Learning Friend!</span></h2>
+        <div style="text-align:center; margin-bottom:18px; font-size:1.2em; color:#36cfc9;">
+            <span style="font-size:1.5em;">👋</span> Hi! I'm <b>BuddyBot</b>. Ask me anything, or try a quiz! <span style="font-size:1.3em;">🎈📚✨</span>
+        </div>
         <form method="POST">
-            <input type="text" name="query" placeholder="Type your question here..." required>
-            <button name="ask" type="submit">Send</button>
-            <button name="clear" type="submit">Clear History</button>
+            <input type="text" name="query" placeholder="Ask me a fun question, or type 'quiz'!" required>
+            <button name="ask" type="submit">Send <span style="font-size:1.2em;">🚀</span></button>
+            <button name="clear" type="submit">Clear <span style="font-size:1.2em;">🧹</span></button>
         </form>
-
         {% if query %}
         <div class="chat">
             <div class="user"><strong>You:</strong> {{ query }}</div>
-            <div class="bot"><strong>Bot:</strong> {{ response }}</div>
+            <div class="bot"><strong>BuddyBot:</strong> {{ response }}</div>
         </div>
         {% endif %}
-
         <div class="history">
-            <h4>🕒 Chat History</h4>
-            <pre>{{ history }}</pre>
+            <h4>Chat History</h4>
+            {% if history.strip() %}
+            <div class="history-badge">🌟 Active Learner!</div>
+            <ul class="history-list">
+                {% for line in history.split('\n') %}
+                {% set is_user = 'User:' in line %}
+                <li class="history-item {{ 'user' if is_user else 'bot' }}">
+                    <span class="avatar">{{ '👦' if is_user else '🤖' }}</span>
+                    <span class="role">{{ 'You' if is_user else 'BuddyBot' }}</span>
+                    <span class="msg">{{ line.split(': ', 1)[1] if ': ' in line else line }}</span>
+                    <span class="icon">{{ '🎈' if is_user else '📚' }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="no-history">No history yet! Start chatting! <span style="font-size:1.2em;">✨</span></div>
+            {% endif %}
         </div>
+        <!-- Placeholder for sound effects -->
+        <audio id="sendSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
+        <audio id="receiveSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
     </div>
+    <script>
+    // Fun unpredictable background color transitions on each message
+    function randomPastel() {
+        const h = Math.floor(Math.random()*360);
+        return `hsl(${h}, 80%, 90%)`;
+    }
+    function animateBackground() {
+        document.body.style.background = `linear-gradient(135deg, ${randomPastel()} 0%, ${randomPastel()} 100%)`;
+    }
+    if (document.querySelector('.chat')) animateBackground();
+    // Play sound on send/receive
+    if (document.querySelector('.chat')) {
+        document.getElementById('sendSound').play();
+        setTimeout(()=>document.getElementById('receiveSound').play(), 400);
+    }
+    </script>
 </body>
 </html>
