@@ -7,114 +7,116 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h2>🤖 BuddyBot <span style="font-size:0.7em;">- Your Learning Friend!</span></h2>
-        <div style="text-align:center; margin-bottom:18px; font-size:1.2em; color:#36cfc9;">
-            <span style="font-size:1.5em;">👋</span> Hi! I'm <b>BuddyBot</b>. Ask me anything, or try a quiz! <span style="font-size:1.3em;">🎈📚✨</span>
-        </div>
-
-        <!-- ✅ FORM WITH MIC BUTTON -->
-        <form method="POST">
-            <input type="text" name="query" id="user_input" placeholder="Ask me a fun question, or type 'quiz'!" required>
-
-            <!-- 🎤 Microphone Button -->
-            <button type="button" id="micBtn" title="Speak"><span id="micIcon">🎤</span></button>
-
-            <button name="ask" type="submit">Send <span style="font-size:1.2em;">🚀</span></button>
-            <button name="clear" type="submit">Clear <span style="font-size:1.2em;">🧹</span></button>
-        </form>
-
-        {% if query %}
-        <div class="chat">
-            <div class="user"><strong>You:</strong> {{ query }}</div>
-            <div class="bot"><strong>BuddyBot:</strong> {{ response }}</div>
-        </div>
-        {% endif %}
-
-        <div class="history">
-            <h4>Chat History</h4>
-            {% if history.strip() %}
-            <div class="history-badge">🌟 Active Learner!</div>
-            <ul class="history-list">
-                {% for line in history.split('\n') %}
-                {% set is_user = 'User:' in line %}
-                <li class="history-item {{ 'user' if is_user else 'bot' }}">
-                    <span class="avatar">{{ '👦' if is_user else '🤖' }}</span>
-                    <span class="role">{{ 'You' if is_user else 'BuddyBot' }}</span>
-                    <span class="msg">{{ line.split(': ', 1)[1] if ': ' in line else line }}</span>
-                    <span class="icon">{{ '🎈' if is_user else '📚' }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <div class="no-history">No history yet! Start chatting! <span style="font-size:1.2em;">✨</span></div>
-            {% endif %}
-        </div>
-
-        <!-- 🎵 Sound Effects -->
-        <audio id="sendSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
-        <audio id="receiveSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
+<div class="container">
+    <h2>🤖 BuddyBot <span style="font-size:0.7em;">- Your Learning Friend!</span></h2>
+    <div style="text-align:center; margin-bottom:18px; font-size:1.2em; color:#36cfc9;">
+        <span style="font-size:1.5em;">👋</span> Hi! I'm <b>BuddyBot</b>. Ask me anything, or try a quiz! <span style="font-size:1.3em;">🎈📚✨</span>
     </div>
 
-    <!-- 🌈 Background and Sound -->
-    <script>
-    function randomPastel() {
-        const h = Math.floor(Math.random()*360);
-        return `hsl(${h}, 80%, 90%)`;
-    }
-    function animateBackground() {
-        document.body.style.background = `linear-gradient(135deg, ${randomPastel()} 0%, ${randomPastel()} 100%)`;
-    }
-    if (document.querySelector('.chat')) animateBackground();
+    <!-- ✅ FORM WITH MIC & FILE UPLOAD -->
+    <form method="POST" enctype="multipart/form-data">
+        <input type="text" name="query" id="user_input" placeholder="Ask me a fun question, or type 'quiz'!" required>
 
-    // 🎵 Sound on send/receive
-    if (document.querySelector('.chat')) {
-        document.getElementById('sendSound').play();
-        setTimeout(() => document.getElementById('receiveSound').play(), 400);
-    }
-    </script>
+        <!-- 🎤 Microphone Button -->
+        <button type="button" id="micBtn" title="Speak"><span id="micIcon">🎤</span></button>
 
-    <!-- 🎤 Voice Input -->
-    <script>
-    const micBtn = document.getElementById('micBtn');
-    const inputBox = document.getElementById('user_input');
+        <!-- 📁 File Upload -->
+        <input type="file" name="file" accept=".txt,.pdf,.docx" onchange="this.form.submit()" style="padding: 10px; font-size: 14px;" title="Upload a file to summarize">
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        <button name="ask" type="submit">Send <span style="font-size:1.2em;">🚀</span></button>
+        <button name="clear" type="submit">Clear <span style="font-size:1.2em;">🧹</span></button>
+    </form>
 
-    if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'en-US';
-        recognition.continuous = false;
-        recognition.interimResults = false;
+    {% if query %}
+    <div class="chat">
+        <div class="user"><strong>You:</strong> {{ query }}</div>
+        <div class="bot"><strong>BuddyBot:</strong> {{ response }}</div>
+    </div>
+    {% endif %}
 
-        micBtn.addEventListener('click', () => {
-            recognition.start();
-            micBtn.disabled = true;
-            micBtn.innerText = '🎙️ Listening...';
-        });
+    <div class="history">
+        <h4>Chat History</h4>
+        {% if history.strip() %}
+        <div class="history-badge">🌟 Active Learner!</div>
+        <ul class="history-list">
+            {% for line in history.split('\n') %}
+            {% set is_user = 'User:' in line %}
+            <li class="history-item {{ 'user' if is_user else 'bot' }}">
+                <span class="avatar">{{ '👦' if is_user else '🤖' }}</span>
+                <span class="role">{{ 'You' if is_user else 'BuddyBot' }}</span>
+                <span class="msg">{{ line.split(': ', 1)[1] if ': ' in line else line }}</span>
+                <span class="icon">{{ '🎈' if is_user else '📚' }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="no-history">No history yet! Start chatting! <span style="font-size:1.2em;">✨</span></div>
+        {% endif %}
+    </div>
 
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            inputBox.value = transcript;
-            micBtn.innerText = '🎤';
-            micBtn.disabled = false;
-        };
+    <!-- 🎵 Sound Effects -->
+    <audio id="sendSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
+    <audio id="receiveSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
+</div>
 
-        recognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-            micBtn.innerText = '🎤';
-            micBtn.disabled = false;
-        };
+<!-- 🌈 Background and Sound -->
+<script>
+function randomPastel() {
+    const h = Math.floor(Math.random()*360);
+    return `hsl(${h}, 80%, 90%)`;
+}
+function animateBackground() {
+    document.body.style.background = `linear-gradient(135deg, ${randomPastel()} 0%, ${randomPastel()} 100%)`;
+}
+if (document.querySelector('.chat')) animateBackground();
 
-        recognition.onend = () => {
-            micBtn.innerText = '🎤';
-            micBtn.disabled = false;
-        };
-    } else {
+if (document.querySelector('.chat')) {
+    document.getElementById('sendSound').play();
+    setTimeout(() => document.getElementById('receiveSound').play(), 400);
+}
+</script>
+
+<!-- 🎤 Voice Input -->
+<script>
+const micBtn = document.getElementById('micBtn');
+const inputBox = document.getElementById('user_input');
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    micBtn.addEventListener('click', () => {
+        recognition.start();
         micBtn.disabled = true;
-        micBtn.title = 'Speech recognition not supported. Use Chrome or Edge.';
-        alert("⚠️ Speech recognition not supported. Try using Google Chrome.");
-    }
-    </script>
+        micBtn.innerText = '🎙️ Listening...';
+    });
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        inputBox.value = transcript;
+        micBtn.innerText = '🎤';
+        micBtn.disabled = false;
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        micBtn.innerText = '🎤';
+        micBtn.disabled = false;
+    };
+
+    recognition.onend = () => {
+        micBtn.innerText = '🎤';
+        micBtn.disabled = false;
+    };
+} else {
+    micBtn.disabled = true;
+    micBtn.title = 'Speech recognition not supported. Use Chrome or Edge.';
+    alert("⚠️ Speech recognition not supported. Try using Google Chrome.");
+}
+</script>
 </body>
 </html>
