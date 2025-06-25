@@ -1,1 +1,2 @@
-GEMINI_API_KEY = "AIzaSyCQUFQZ__YdaN6tDy6EuNPtRdMMeRGFtw4"
+# config.py
+OPENAI_API_KEY = "mykey"
