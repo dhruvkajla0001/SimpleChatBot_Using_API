@@ -5,58 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BuddyBot - README</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #0f172a;
-      color: #e2e8f0;
-      padding: 40px;
-      max-width: 900px;
-      margin: auto;
-      line-height: 1.7;
-    }
-    h1 {
-      color: #60a5fa;
-      font-size: 2.5em;
-      margin-bottom: 10px;
-    }
-    h2 {
-      color: #93c5fd;
-      margin-top: 40px;
-    }
-    code {
-      background-color: #1e293b;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 0.95em;
-    }
-    pre {
-      background-color: #1e293b;
-      padding: 15px;
-      border-radius: 6px;
-      overflow-x: auto;
-      color: #cbd5e1;
-    }
-    .badge {
-      display: inline-block;
-      background-color: #38bdf8;
-      color: #0f172a;
-      padding: 2px 10px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 0.85em;
-    }
-    ul {
-      margin-top: 10px;
-    }
-    a {
-      color: #7dd3fc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+
 </head>
 <body>
   <h1>🤖 BuddyBot</h1>
