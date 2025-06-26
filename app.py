@@ -35,9 +35,21 @@ def index():
         if 'ask' in request.form:
             user_input = request.form["query"]
             bot_response = get_bot_response(user_input)
+
         elif 'clear' in request.form:
             clear_history()
             bot_response = "🧹 Chat history cleared!"
+            user_input = ""
+
+        elif 'file' in request.files and request.files['file'].filename != "":
+            file = request.files['file']
+            try:
+                text = extract_text_from_file(file)
+                user_input = f"Summarize the uploaded file: {file.filename}"
+                bot_response = summarize_text(text)
+            except Exception as e:
+                bot_response = f"⚠️ Error: {str(e)}"
+                user_input = "File upload failed"
 
     chat_history = get_full_history()
     return render_template("index.html", query=user_input, response=bot_response, history=chat_history)

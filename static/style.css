@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* General layout */
 body {
     background: linear-gradient(135deg, #0a0a0a 0%, #0d1a26 100%);
     font-family: 'Roboto', Arial, sans-serif;
@@ -115,7 +114,6 @@ button[name="clear"]:hover {
     color: #fff;
 }
 
-/* Chat bubbles */
 .chat {
     flex: 2 1 0;
     min-width: 0;
