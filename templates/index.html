@@ -1,65 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BuddyBot - Your Learning Friend!</title>
+    <title>ProBot - Your Professional Assistant</title>
     <link rel="stylesheet" href="/static/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h2>🤖 BuddyBot <span style="font-size:0.7em;">- Your Learning Friend!</span></h2>
-        <div style="text-align:center; margin-bottom:18px; font-size:1.2em; color:#36cfc9;">
-            <span style="font-size:1.5em;">👋</span> Hi! I'm <b>BuddyBot</b>. Ask me anything, or try a quiz! <span style="font-size:1.3em;">🎈📚✨</span>
-        </div>
-        <form method="POST">
-            <input type="text" name="query" placeholder="Ask me a fun question, or type 'quiz'!" required>
-            <button name="ask" type="submit">Send <span style="font-size:1.2em;">🚀</span></button>
-            <button name="clear" type="submit">Clear <span style="font-size:1.2em;">🧹</span></button>
-        </form>
-        {% if query %}
-        <div class="chat">
-            <div class="user"><strong>You:</strong> {{ query }}</div>
-            <div class="bot"><strong>BuddyBot:</strong> {{ response }}</div>
-        </div>
-        {% endif %}
-        <div class="history">
-            <h4>Chat History</h4>
-            {% if history.strip() %}
-            <div class="history-badge">🌟 Active Learner!</div>
-            <ul class="history-list">
-                {% for line in history.split('\n') %}
-                {% set is_user = 'User:' in line %}
-                <li class="history-item {{ 'user' if is_user else 'bot' }}">
-                    <span class="avatar">{{ '👦' if is_user else '🤖' }}</span>
-                    <span class="role">{{ 'You' if is_user else 'BuddyBot' }}</span>
-                    <span class="msg">{{ line.split(': ', 1)[1] if ': ' in line else line }}</span>
-                    <span class="icon">{{ '🎈' if is_user else '📚' }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <div class="no-history">No history yet! Start chatting! <span style="font-size:1.2em;">✨</span></div>
+    <div class="main-flex-row">
+        <div class="container">
+            <h2>ProBot <span class="subtitle">- Your Professional Assistant</span></h2>
+            <div class="intro-text">
+                Welcome to <b>ProBot</b>. Get instant, reliable answers and insights for your professional needs.
+            </div>
+            <form method="POST" enctype="multipart/form-data" id="chat-form">
+                <input type="text" name="query" id="query-input" placeholder="Type your question here..." required>
+                <button name="ask" type="submit">Send</button>
+                <button name="clear" type="submit">Clear</button>
+                <button type="button" id="voice-btn" title="Speak" class="icon-btn">🎤</button>
+                <label for="file-upload" class="icon-btn" title="Upload file for summary">📎</label>
+                <input type="file" id="file-upload" name="file" accept=".pdf,.doc,.docx,image/*" style="display:none;" />
+            </form>
+            <div id="file-summary" class="bot" style="display:none;"></div>
+            {% if query %}
+            <div class="chat fade-in">
+                <div class="user"><strong>You:</strong> {{ query }}</div>
+                <div class="bot"><strong>ProBot:</strong> {{ response }}</div>
+            </div>
             {% endif %}
         </div>
-        <!-- Placeholder for sound effects -->
-        <audio id="sendSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
-        <audio id="receiveSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3" preload="auto"></audio>
+        <div class="history">
+            <button type="button" class="toggle-history-btn" onclick="toggleHistory()">Show/Hide Chat History</button>
+            <div id="history-content">
+                <h4>Chat History</h4>
+                {% if history.strip() %}
+                <ul class="history-list">
+                    {% for line in history.split('\n') %}
+                    {% set is_user = 'User:' in line %}
+                    <li class="history-item {{ 'user' if is_user else 'bot' }} slide-in">
+                        <span class="role">{{ 'You' if is_user else 'ProBot' }}</span>
+                        <span class="msg">{{ line.split(': ', 1)[1] if ': ' in line else line }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="no-history">No history yet. Start a professional conversation.</div>
+                {% endif %}
+            </div>
+        </div>
     </div>
     <script>
-    // Fun unpredictable background color transitions on each message
-    function randomPastel() {
-        const h = Math.floor(Math.random()*360);
-        return `hsl(${h}, 80%, 90%)`;
-    }
-    function animateBackground() {
-        document.body.style.background = `linear-gradient(135deg, ${randomPastel()} 0%, ${randomPastel()} 100%)`;
-    }
-    if (document.querySelector('.chat')) animateBackground();
-    // Play sound on send/receive
+    // Subtle background transition on new message
     if (document.querySelector('.chat')) {
-        document.getElementById('sendSound').play();
-        setTimeout(()=>document.getElementById('receiveSound').play(), 400);
+        document.body.classList.add('bg-transition');
     }
+    function toggleHistory() {
+        const el = document.getElementById('history-content');
+        if (el.style.display === 'none') {
+            el.style.display = '';
+        } else {
+            el.style.display = 'none';
+        }
+    }
+    // Voice-to-text logic
+    const voiceBtn = document.getElementById('voice-btn');
+    const queryInput = document.getElementById('query-input');
+    if (voiceBtn && window.SpeechRecognition || window.webkitSpeechRecognition) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        voiceBtn.onclick = function() {
+            recognition.start();
+            voiceBtn.classList.add('listening');
+        };
+        recognition.onresult = function(event) {
+            queryInput.value = event.results[0][0].transcript;
+            voiceBtn.classList.remove('listening');
+        };
+        recognition.onerror = function() {
+            voiceBtn.classList.remove('listening');
+        };
+    }
+    // File upload logic
+    const fileUpload = document.getElementById('file-upload');
+    const fileSummary = document.getElementById('file-summary');
+    fileUpload && fileUpload.addEventListener('change', function() {
+        if (!fileUpload.files.length) return;
+        const formData = new FormData();
+        formData.append('file', fileUpload.files[0]);
+        fetch('/summarize', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            fileSummary.style.display = 'block';
+            fileSummary.textContent = data.summary || 'No summary available.';
+        })
+        .catch(() => {
+            fileSummary.style.display = 'block';
+            fileSummary.textContent = 'Error summarizing file.';
+        });
+    });
     </script>
 </body>
 </html>
