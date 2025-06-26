@@ -60,6 +60,10 @@ export GEMINI_API_KEY=your_key_here
 # Run the app
 python app.py
   </pre>
+  <h2>output</h2>
+![Screenshot 2025-06-26 153703](https://github.com/user-attachments/assets/38457dc5-a360-4e66-8a68-4a580b5e1a5b)
+
+
 
   <h2>🔐 Environment Variables</h2>
   <ul>
