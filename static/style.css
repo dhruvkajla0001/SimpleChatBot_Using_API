@@ -394,11 +394,9 @@ button[name="clear"]:hover {
     box-shadow: 0 2px 12px rgba(25, 118, 210, 0.08);
     display: none;
 }
-
 button[name="delete_history"] {
     background-color: #ff1744;
 }
-
 button[name="delete_history"]:hover {
     background-color: #c4001d;
 }
