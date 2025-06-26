@@ -36,10 +36,6 @@ def index():
             user_input = request.form["query"]
             bot_response = get_bot_response(user_input)
 
-        elif 'clear' in request.form:
-            clear_history()
-            bot_response = "🩹 Chat history cleared!"
-            user_input = ""
 
         elif 'delete' in request.form:
             clear_history()
