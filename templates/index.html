@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>ProBot - Your Professional Assistant</title>
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -12,15 +13,21 @@
             <div class="intro-text">
                 Welcome to <b>ProBot</b>. Get instant, reliable answers and insights for your professional needs.
             </div>
+
+            <!-- ✅ Chat Input Form -->
             <form method="POST" enctype="multipart/form-data" id="chat-form">
                 <input type="text" name="query" id="query-input" placeholder="Type your question here..." required>
                 <button name="ask" type="submit">Send</button>
                 <button name="clear" type="submit">Clear</button>
+                <button name="delete" type="submit">Delete History</button>
                 <button type="button" id="voice-btn" title="Speak" class="icon-btn">🎤</button>
                 <label for="file-upload" class="icon-btn" title="Upload file for summary">📎</label>
                 <input type="file" id="file-upload" name="file" accept=".pdf,.doc,.docx,image/*" style="display:none;" />
             </form>
+
+            <!-- ✅ File Summary Output -->
             <div id="file-summary" class="bot" style="display:none;"></div>
+
             {% if query %}
             <div class="chat fade-in">
                 <div class="user"><strong>You:</strong> {{ query }}</div>
@@ -28,6 +35,8 @@
             </div>
             {% endif %}
         </div>
+
+        <!-- ✅ Chat History Panel -->
         <div class="history">
             <button type="button" class="toggle-history-btn" onclick="toggleHistory()">Show/Hide Chat History</button>
             <div id="history-content">
@@ -48,47 +57,50 @@
             </div>
         </div>
     </div>
+
+    <!-- ✅ Scripts -->
     <script>
-    // Subtle background transition on new message
+    // Animate background
     if (document.querySelector('.chat')) {
         document.body.classList.add('bg-transition');
     }
+
+    // Toggle history visibility
     function toggleHistory() {
         const el = document.getElementById('history-content');
-        if (el.style.display === 'none') {
-            el.style.display = '';
-        } else {
-            el.style.display = 'none';
-        }
+        el.style.display = el.style.display === 'none' ? '' : 'none';
     }
-    // Voice-to-text logic
+
+    // Voice to text
     const voiceBtn = document.getElementById('voice-btn');
     const queryInput = document.getElementById('query-input');
-    if (voiceBtn && window.SpeechRecognition || window.webkitSpeechRecognition) {
+    if (voiceBtn && (window.SpeechRecognition || window.webkitSpeechRecognition)) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
         recognition.lang = 'en-US';
         recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-        voiceBtn.onclick = function() {
+
+        voiceBtn.onclick = () => {
             recognition.start();
             voiceBtn.classList.add('listening');
         };
-        recognition.onresult = function(event) {
+        recognition.onresult = (event) => {
             queryInput.value = event.results[0][0].transcript;
             voiceBtn.classList.remove('listening');
         };
-        recognition.onerror = function() {
+        recognition.onerror = () => {
             voiceBtn.classList.remove('listening');
         };
     }
-    // File upload logic
+
+    // File upload for summarization
     const fileUpload = document.getElementById('file-upload');
     const fileSummary = document.getElementById('file-summary');
-    fileUpload && fileUpload.addEventListener('change', function() {
+    fileUpload?.addEventListener('change', () => {
         if (!fileUpload.files.length) return;
         const formData = new FormData();
         formData.append('file', fileUpload.files[0]);
+
         fetch('/summarize', {
             method: 'POST',
             body: formData

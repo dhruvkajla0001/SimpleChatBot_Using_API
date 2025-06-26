@@ -38,7 +38,12 @@ def index():
 
         elif 'clear' in request.form:
             clear_history()
-            bot_response = "🧹 Chat history cleared!"
+            bot_response = "🩹 Chat history cleared!"
+            user_input = ""
+
+        elif 'delete' in request.form:
+            clear_history()
+            bot_response = "🗑️ Chat history deleted permanently!"
             user_input = ""
 
         elif 'file' in request.files and request.files['file'].filename != "":
@@ -84,7 +89,6 @@ def summarize_file():
         return jsonify({'summary': f'Error reading file: {str(e)}'}), 500
     if not text.strip():
         return jsonify({'summary': 'No text found in file.'}), 200
-    # Use Gemini API to summarize if available
     try:
         from chatbot import get_bot_response
         summary = get_bot_response(f"Summarize this text in a concise way:\n{text[:4000]}")
